@@ -1,0 +1,13 @@
+To install the application:
+
+  sudo apt-get install ruby1.9.3 libsqlite3-dev
+  sudo gem install bundle 
+
+  bundle install
+
+Put the database inside the project folder:
+  data/quantal.sqlite
+
+To run the application:
+
+  bundle exec ruby dashboard.rb
