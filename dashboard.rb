@@ -24,6 +24,10 @@ after do
   ActiveRecord::Base.clear_active_connections!
 end
 
+get "/css/style.css" do
+  scss :style, :style => :expanded
+end
+
 
 get "/" do
   @jobs = Job.all
