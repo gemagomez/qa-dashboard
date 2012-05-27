@@ -74,7 +74,6 @@ get "/build/:build" do
   @total_skipped = 0
 
   for result in @results_build
-    puts result.to_s
     @total_fail += result.failcount.to_i
     @total_skipped += result.skipcount.to_i
     @total_tests += result.totalcount.to_i
