@@ -23,7 +23,7 @@
           = build[:fail]
         %td
           = build[:total]
-        %td{ :class => "#{build[:color]}" }
+        %td{ :class => "#{result_color(build[:pass_rate])}" }
           = format "%.0f", (build[:pass_rate]*100) 
           \%
         %td
