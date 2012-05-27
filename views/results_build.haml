@@ -2,16 +2,38 @@
   This is a sidebar
 .grid_12
   %h2 Build #{@build_id}
+  %ul
+    %li I think job_result is irrelevant and should be removed
+    %li We need links to the jobs
+    %li Job information is missing 
+
+
+  %h3 Summary
+  
+  %table{ :border => 0 }
+    %tr
+      %td Total Tests Failed: 
+      %td.num
+        = @total_fail.to_s
+    %tr
+      %td Total Tests Skipped:
+      %td.num
+        = @total_skipped.to_s
+    %tr
+      %td Total Tests Run:
+      %td.num
+        = @total_tests.to_s 
+
+  %h3 Jobs details
+
   %table
     %tr
       %th Date
       %th Test Suite
       %th Result
-      %th Duration (?)
       %th Failed
       %th Skipped
       %th Total Tests
-
     - for result in @results_build
       %tr
         %td
@@ -20,11 +42,9 @@
           N/A
         %td
           = result[:result]
-        %td
-          = result[:duration]
-        %td
+        %td.num
           = result[:failcount]
-        %td 
+        %td.num 
           = result[:skipcount]
-        %td
+        %td.num
           = result[:totalcount]
