@@ -45,7 +45,7 @@ get "/" do
       if(pass_rate > 0.9 ) 
         color = "green"
       elsif (pass_rate <= 0.9) and (pass_rate > 0.6) 
-        color = "orange"
+        color = "yellow"
       else 
         color = "red" 
       end 

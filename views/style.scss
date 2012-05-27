@@ -1,4 +1,7 @@
 $blue: #3bbfce;
+$result_red: #ffabab;
+$result_yellow: #ffffa0;
+$result_green: #abffab;
 
 
 h1 {
@@ -26,15 +29,15 @@ td {
 }
 
 .red {
-  background-color: red;  
+  background-color: $result_red;  
 }
 
-.orange {
-  background-color: yellow;
+.yellow {
+  background-color: $result_yellow;
 }
 
 .green {
-  background-color: green;
+  background-color: $result_green;
 }
 
 
