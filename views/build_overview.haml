@@ -1,26 +1,30 @@
-%h2 Smoke testing for ubuntu, quantal
-%table
-  %tr
-    %th Build
-    %th Fail/Skip
-    %th Pass
-    %th #Tests
-    %th Pass Rate
-    %th Bugs
-  - for build in @builds
-    %tr
-      %td.num
-        %a{ :href => "/build/#{build[:id]}" } 
-          = build[:id]
-      %td.num
-        = build[:fail]
-      %td.num
-        = build[:pass]
-      %td.num
-        = build[:total]
-      %td.num{ :class => "#{build[:color]}" }
-        = format "%.0f", (build[:pass_rate]*100) 
-        \%
-      %td.num
-        = build[:bugs]
+.grid_3
+  This is a sidebar
 
+.grid_12
+
+  %h2 Smoke testing
+  %table
+    %tr
+      %th Build
+      %th Passed
+      %th Failed/Skipped
+      %th Total
+      %th Pass Rate
+      %th Bugs
+    - for build in @builds
+      %tr
+        %td
+          %a{ :href => "/build/#{build[:id]}" } 
+            = build[:id]
+        %td
+          = build[:pass]
+        %td
+          = build[:fail]
+        %td
+          = build[:total]
+        %td{ :class => "#{build[:color]}" }
+          = format "%.0f", (build[:pass_rate]*100) 
+          \%
+        %td
+          N/A

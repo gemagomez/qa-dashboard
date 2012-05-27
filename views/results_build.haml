@@ -1,38 +1,30 @@
-%h2 Build #{@build_id}
-%table
-  %tr
-    %th Date
-    %th Test Suite
-    %th Result
-    %th Duration (?)
-    %th Failed
-    %th Skipped
-    %th Total Tests
-
-  - for result in @results_build
+.grid_3
+  This is a sidebar
+.grid_12
+  %h2 Build #{@build_id}
+  %table
     %tr
-      %td
-        = result[:date]
-      %td
-        N/A
-      %td
-        = result[:result]
-      %td
-        = result[:duration]
-      %td.num
-        = result[:failcount]
-      %td.num 
-        = result[:skipcount]
-      %td.num
-        = result[:totalcount]
-  %tr
-    %td
-    %td
-    %td
-    %td
-    %td.num
-      = @total_fail.to_s
-    %td.num
-      = @total_skipped.to_s
-    %td.num
-      = @total_tests.to_s
+      %th Date
+      %th Test Suite
+      %th Result
+      %th Duration (?)
+      %th Failed
+      %th Skipped
+      %th Total Tests
+
+    - for result in @results_build
+      %tr
+        %td
+          = result[:date]
+        %td
+          N/A
+        %td
+          = result[:result]
+        %td
+          = result[:duration]
+        %td
+          = result[:failcount]
+        %td 
+          = result[:skipcount]
+        %td
+          = result[:totalcount]

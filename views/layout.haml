@@ -2,8 +2,13 @@
 %html
   %head
     %link{ :rel => "stylesheet", :type => "text/css", :href => "/css/style.css" }
-    %title Ubuntu Test Results Dashboard
+    %link{ :rel => "stylesheet", :type => "text/css", :href => "/css/grid.css" }
+    %title Dashboard for Automated Testing - Ubuntu
 
   %body
-    %h1 Test Results Dashboard
-    = yield
+    .container_15
+      .grid_15
+        %h1 Test Results Dashboard
+
+    .container_15
+      = yield
