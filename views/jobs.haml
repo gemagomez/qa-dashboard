@@ -1,7 +1,26 @@
-%h1 Jobs:
-%ul
+%h2 Test Runs
+
+%table
+  %tr 
+    %th ID
+    %th Release
+    %th Flavour
+    %th Variant
+    %th Arch
+    %th test
   - for job in @jobs
-    %li
-      = job.test
-      
+    %tr
+      %td
+        = job.jobid
+      %td
+        = job.release
+      %td
+        = job.flavor
+      %td
+        = job.variant
+      %td
+        = job.arch
+      %td
+        = job.test
+
 
