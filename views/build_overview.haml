@@ -1,0 +1,14 @@
+%h2 Build overview
+%table
+  %tr
+    %th Build
+    %th Pass rate
+    %th Bugs
+  - for build in @builds
+    %tr
+      %td
+        = build[:id]
+      %td
+        = format "%.2f", build[:pass_rate]
+      %td
+        Nothing to see here

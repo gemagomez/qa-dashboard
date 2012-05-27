@@ -30,6 +30,29 @@ end
 
 
 get "/" do
+  @builds = []
+  build_ids = Result.select(:description).uniq.map { |result| result.description }
+
+  for id in build_ids
+    successes = Result.where(:description => id, :result => "SUCCESS").count
+    total = Result.where(:description => id).count
+    pass_rate = (total == 0) ? 0.0 : successes.to_f/total.to_f;
+    @builds << { :id => id, :pass_rate => pass_rate }
+  end
+
+#  @builds = []
+#  Result.select(:description).uniq.each do |result|
+#    id = result.description
+#    successes = Result.where(:description => id, :result => "SUCCESS").count
+#    total = Result.where(:description => id).count
+#    pass_rate = (total == 0) ? 0.0 : successes.to_f/total.to_f;
+#    @builds << { :id => id, :pass_rate => pass_rate }
+#  end
+
+  haml :build_overview
+end
+
+get "/jobs" do
   @jobs = Job.all
   haml :jobs
 
