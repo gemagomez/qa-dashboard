@@ -31,27 +31,32 @@ end
 
 get "/" do
   @builds = []
-  build_ids = Result.select(:description).uniq.map { |result| result.description }
+  build_ids = Result.select(:description).uniq.order("description DESC").map { |result| result.description }
 
   for id in build_ids
-    successes = Result.where(:description => id, :result => "SUCCESS").count
-    total = Result.where(:description => id).count
-    pass_rate = (total == 0) ? 0.0 : successes.to_f/total.to_f;
-    @builds << { :id => id, 
-                 :pass => successes, 
-                 :fail => (total.to_i - successes.to_i), 
-                 :total => total, 
-                 :pass_rate => pass_rate }
-  end
+    if(id =~ /[0-9]{8}.*/) 
+      successes = Result.where(:description => id, :result => "SUCCESS").count
+      total = Result.where(:description => id).count
+      pass_rate = (total == 0) ? 0.0 : successes.to_f/total.to_f;
+      
+      # colour coding the results
+      if(pass_rate > 0.9 ) 
+        color = "green"
+      elsif (pass_rate <= 0.9) and (pass_rate > 0.6) 
+        color = "orange"
+      else 
+        color = "red" 
+      end 
 
-#  @builds = []
-#  Result.select(:description).uniq.each do |result|
-#    id = result.description
-#    successes = Result.where(:description => id, :result => "SUCCESS").count
-#    total = Result.where(:description => id).count
-#    pass_rate = (total == 0) ? 0.0 : successes.to_f/total.to_f;
-#    @builds << { :id => id, :pass_rate => pass_rate }
-#  end
+      @builds << { :id => id, 
+                   :pass => successes, 
+                   :fail => (total.to_i - successes.to_i), 
+                   :total => total, 
+                   :pass_rate => pass_rate,
+                   :color => color 
+                  }
+    end
+  end
 
   haml :build_overview
 end

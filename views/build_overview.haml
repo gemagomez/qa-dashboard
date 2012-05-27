@@ -1,4 +1,4 @@
-%h2 Build overview
+%h2 Smoke testing
 %table
   %tr
     %th Build
@@ -18,7 +18,7 @@
         = build[:fail]
       %td
         = build[:total]
-      %td
+      %td{ :class => "#{build[:color]}" }
         = format "%.0f", (build[:pass_rate]*100) 
         \%
       %td
