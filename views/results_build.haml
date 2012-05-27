@@ -19,9 +19,20 @@
         = result[:result]
       %td
         = result[:duration]
-      %td
+      %td.num
         = result[:failcount]
-      %td 
+      %td.num 
         = result[:skipcount]
-      %td
+      %td.num
         = result[:totalcount]
+  %tr
+    %td
+    %td
+    %td
+    %td
+    %td.num
+      = @total_fail.to_s
+    %td.num
+      = @total_skipped.to_s
+    %td.num
+      = @total_tests.to_s

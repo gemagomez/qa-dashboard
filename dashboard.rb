@@ -37,8 +37,10 @@ get "/" do
     if(id =~ /[0-9]{8}.*/) 
       successes = Result.where(:description => id, :result => "SUCCESS").count
       total = Result.where(:description => id).count
-      pass_rate = (total == 0) ? 0.0 : successes.to_f/total.to_f;
-      
+      pass_rate = (total == 0) ? 0.0 : successes.to_f/total.to_f
+      # TODO: Add bug counter and link to bugs
+      bugs = 0
+
       # colour coding the results
       if(pass_rate > 0.9 ) 
         color = "green"
@@ -53,7 +55,8 @@ get "/" do
                    :fail => (total.to_i - successes.to_i), 
                    :total => total, 
                    :pass_rate => pass_rate,
-                   :color => color 
+                   :color => color, 
+                   :bugs => bugs
                   }
     end
   end
@@ -65,6 +68,17 @@ get "/build/:build" do
   @build_id = params[:build]
   puts "build #{params[:build]}"
   @results_build = Result.where(:description => params[:build])
+  
+  @total_tests = 0
+  @total_fail = 0
+  @total_skipped = 0
+
+  for result in @results_build
+    puts result.to_s
+    @total_fail += result.failcount.to_i
+    @total_skipped += result.skipcount.to_i
+    @total_tests += result.totalcount.to_i
+  end
 
   haml :results_build
 
