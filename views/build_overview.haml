@@ -17,14 +17,13 @@
         %td
           %a{ :href => "/build/#{build[:id]}" } 
             = build[:id]
-        %td
+        %td.num
           = build[:pass]
-        %td
+        %td.num
           = build[:fail]
-        %td
+        %td.num
           = build[:total]
-        %td{ :class => "#{result_color(build[:pass_rate])}" }
-          = format "%.0f", (build[:pass_rate]*100) 
-          \%
+        %td.num{ :class => "#{result_color(build[:pass_rate])}" }
+          = format "%.0f\%", (build[:pass_rate]*100) 
         %td
           N/A

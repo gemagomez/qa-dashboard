@@ -9,3 +9,6 @@ gem "sqlite3-ruby"
 gem "haml",         "~> 3.1.4"
 
 gem "sass",         "~> 3.1.15"
+
+
+gem "shotgun"
