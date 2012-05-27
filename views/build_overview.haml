@@ -2,13 +2,24 @@
 %table
   %tr
     %th Build
-    %th Pass rate
+    %th Passed
+    %th Failed/Skipped
+    %th Total
+    %th Pass Rate
     %th Bugs
   - for build in @builds
     %tr
       %td
-        = build[:id]
+        %a{ :href => "/build/#{build[:id]}" } 
+          = build[:id]
       %td
-        = format "%.2f", build[:pass_rate]
+        = build[:pass]
       %td
-        Nothing to see here
+        = build[:fail]
+      %td
+        = build[:total]
+      %td
+        = format "%.0f", (build[:pass_rate]*100) 
+        \%
+      %td
+        N/A

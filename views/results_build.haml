@@ -1,0 +1,27 @@
+%h2 Build #{@build_id}
+%table
+  %tr
+    %th Date
+    %th Test Suite
+    %th Result
+    %th Duration (?)
+    %th Failed
+    %th Skipped
+    %th Total Tests
+
+  - for result in @results_build
+    %tr
+      %td
+        = result[:date]
+      %td
+        N/A
+      %td
+        = result[:result]
+      %td
+        = result[:duration]
+      %td
+        = result[:failcount]
+      %td 
+        = result[:skipcount]
+      %td
+        = result[:totalcount]

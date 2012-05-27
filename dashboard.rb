@@ -37,7 +37,11 @@ get "/" do
     successes = Result.where(:description => id, :result => "SUCCESS").count
     total = Result.where(:description => id).count
     pass_rate = (total == 0) ? 0.0 : successes.to_f/total.to_f;
-    @builds << { :id => id, :pass_rate => pass_rate }
+    @builds << { :id => id, 
+                 :pass => successes, 
+                 :fail => (total.to_i - successes.to_i), 
+                 :total => total, 
+                 :pass_rate => pass_rate }
   end
 
 #  @builds = []
@@ -50,6 +54,15 @@ get "/" do
 #  end
 
   haml :build_overview
+end
+
+get "/build/:build" do
+  @build_id = params[:build]
+  puts "build #{params[:build]}"
+  @results_build = Result.where(:description => params[:build])
+
+  haml :results_build
+
 end
 
 get "/jobs" do
