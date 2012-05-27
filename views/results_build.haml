@@ -3,10 +3,8 @@
 .grid_12
   %h2 Build #{@build_id}
   %ul
-    %li I think job_result is irrelevant and should be removed
     %li We need links to the jobs
     %li Job information is missing 
-
 
   %h3 Summary
   
@@ -28,20 +26,17 @@
 
   %table
     %tr
-      %th Date
-      %th Test Suite
-      %th Result
-      %th Failed
-      %th Skipped
-      %th Total Tests
+      %th date
+      %th test_suite
+      %th #fail
+      %th #skip
+      %th #run
     - for result in @results_build
       %tr
         %td
           = result[:date]
         %td
           N/A
-        %td
-          = result[:result]
         %td.num
           = result[:failcount]
         %td.num 
