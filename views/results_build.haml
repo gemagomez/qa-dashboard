@@ -23,31 +23,33 @@
 
   %h3 Jobs details
 
-  %table
-    %tr
-      %th variant
-      %th arch
-      %th job_name
-      %th date
-      %th test_suite
-      %th #fail
-      %th #skip
-      %th #run
-    - for result in @results_build
+  %table.data-table
+    %thead
       %tr
-        %td
-          = result.job.variant
-        %td
-          = result.job.arch
-        %td
-          = result.job.test
-        %td
-          = result.date
-        %td
-          N/A
-        %td.num
-          = result.failcount
-        %td.num 
-          = result.skipcount
-        %td.num
-          = result.totalcount
+        %th variant
+        %th arch
+        %th job_name
+        %th date
+        %th test_suite
+        %th #fail
+        %th #skip
+        %th #run
+    %tbody
+      - for result in @results_build
+        %tr
+          %td
+            = result.job.variant
+          %td
+            = result.job.arch
+          %td
+            = result.job.test
+          %td
+            = result.date
+          %td
+            N/A
+          %td.num
+            = result.failcount
+          %td.num 
+            = result.skipcount
+          %td.num
+            = result.totalcount
