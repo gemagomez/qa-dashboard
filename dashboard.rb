@@ -66,8 +66,8 @@ end
 
 get "/build/:build" do
   @build_id = params[:build]
-  puts "build #{params[:build]}"
   @results_build = Result.where(:description => params[:build])
+
 
   @total_tests = 0
   @total_fail = 0

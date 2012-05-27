@@ -4,7 +4,6 @@
   %h2 Build #{@build_id}
   %ul
     %li We need links to the jobs
-    %li Job information is missing 
 
   %h3 Summary
   
@@ -26,6 +25,9 @@
 
   %table
     %tr
+      %th variant
+      %th arch
+      %th job_name
       %th date
       %th test_suite
       %th #fail
@@ -34,12 +36,18 @@
     - for result in @results_build
       %tr
         %td
-          = result[:date]
+          = result.job.variant
+        %td
+          = result.job.arch
+        %td
+          = result.job.test
+        %td
+          = result.date
         %td
           N/A
         %td.num
-          = result[:failcount]
+          = result.failcount
         %td.num 
-          = result[:skipcount]
+          = result.skipcount
         %td.num
-          = result[:totalcount]
+          = result.totalcount

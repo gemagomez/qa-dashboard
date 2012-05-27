@@ -25,5 +25,5 @@
           = build[:total]
         %td.num{ :class => "#{result_color(build[:pass_rate])}" }
           = format "%.0f\%", (build[:pass_rate]*100) 
-        %td
-          N/A
+        %td.num
+          = build[:bugs]
