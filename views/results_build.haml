@@ -1,7 +1,12 @@
 .grid_15
-  %h2 Build #{@build_id}
+  #breadcrumb
+    %a{ :href => "/" }
+      Smoke Testing
+    >> Build #{@build_id}
+
   %ul
     %li We need links to the jobs
+    %li What about extracting all the logs from jenkins and making them available on the dashboard? It doesn’t look very complicated and removes the jenkins middle man for triaging
 
   %h3 Summary
   
@@ -19,16 +24,19 @@
       %td.num
         = @total_tests.to_s 
 
+  %h3 Graph
+  Graph to be added
+
   %h3 Jobs details
 
   %table.data-table
     %thead
       %tr
+        %th test_suite
         %th variant
         %th arch
         %th job_name
         %th date
-        %th test_suite
         %th #fail
         %th #skip
         %th #run
@@ -36,15 +44,16 @@
       - for result in @results_build
         %tr
           %td
+            N/A
+          %td
             = result.job.variant
           %td
             = result.job.arch
           %td
-            = result.job.test
+            %a{ :href => "http://jenkins.qa.ubuntu.com/", :target => "_blank" }
+              = result.job.test
           %td
             = result.date
-          %td
-            N/A
           %td.num
             = result.failcount
           %td.num 
