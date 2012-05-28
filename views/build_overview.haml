@@ -1,3 +1,15 @@
+:javascript
+  $(document).ready(function() {
+    $(".data-table").dataTable({
+      "bPaginate": false,
+      "aaSorting": [[0, 'desc']]
+    });
+  });
+
+.grid_15
+
+  %h2 Smoke testing
+
 .grid_3
   %h1 &nbsp;
 
@@ -11,27 +23,28 @@
 
 .grid_12
 
-  %h2 Smoke testing
-  %table
-    %tr
-      %th Build
-      %th Passed
-      %th Failed/Skipped
-      %th Total
-      %th Pass Rate
-      %th Bugs
-    - for build in @builds
+  %table.data-table
+    %thead
       %tr
-        %td
-          %a{ :href => "/build/#{build[:id]}" } 
-            = build[:id]
-        %td.num
-          = build[:pass]
-        %td.num
-          = build[:fail]
-        %td.num
-          = build[:total]
-        %td.num{ :class => "#{result_color(build[:pass_rate])}" }
-          = format "%.0f\%", (build[:pass_rate]*100) 
-        %td.num
-          = build[:bugs]
+        %th Build
+        %th Passed
+        %th Failed/Skipped
+        %th Total
+        %th Pass Rate
+        %th Bugs
+    %tbody
+      - for build in @builds
+        %tr
+          %td
+            %a{ :href => "/build/#{build[:id]}" } 
+              = build[:id]
+          %td.num
+            = build[:pass]
+          %td.num
+            = build[:fail]
+          %td.num
+            = build[:total]
+          %td.num{ :class => "#{result_color(build[:pass_rate])}" }
+            = format "%.0f\%", (build[:pass_rate]*100) 
+          %td.num
+            = build[:bugs]

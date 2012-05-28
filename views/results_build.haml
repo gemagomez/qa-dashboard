@@ -1,8 +1,21 @@
+:javascript
+  $(document).ready(function() {
+    $(".data-table").dataTable({
+      "bPaginate": false,
+      "aaSorting": [[0, 'desc']]
+    });
+  });
+
 .grid_15
+
   #breadcrumb
-    %a{ :href => "/" }
-      Smoke Testing
-    >> Build #{@build_id}
+    %span.crumb
+      %a{ :href => "/" }
+        Smoke Testing
+    %span.crumb-sep
+      >>
+    %span.crumb
+      Build #{@build_id}
 
   %ul
     %li We need links to the jobs
@@ -29,7 +42,7 @@
 
   %h3 Jobs details
 
-  %table.data-table
+  %table.data-table.fullwidth
     %thead
       %tr
         %th test_suite
