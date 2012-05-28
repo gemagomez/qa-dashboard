@@ -17,25 +17,29 @@
   %body
     .container_15
       .grid_15
-        %h1 Test Results Dashboard
-        %ul.top_nav
-          %li 
-            %a{ :href => "/" }
-              Smoke
-          %li 
-            %a 
-              Regression
-          %li 
-            %a 
-              LTS
-          %li 
-            %a 
-              Upgrade
-          %li 
-            %a 
-              Bootspeed
-          %li 
-            %a 
-              SRU
+        #header
+          #top_nav
+            %ul
+              %li 
+                %a{ :href => "/" }
+                  Smoke
+              %li 
+                %a 
+                  Regression
+              %li 
+                %a 
+                  LTS
+              %li 
+                %a 
+                  Upgrade
+              %li 
+                %a 
+                  Bootspeed
+              %li 
+                %a 
+                  SRU
+              %li &nbsp;
+          %a#logo{ :href => "/" }
+            %img{ :src => "/images/header_logo.png", :alt => "Ubuntu QA" } 
     .container_15
       = yield

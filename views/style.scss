@@ -2,6 +2,7 @@ $blue: #3bbfce;
 $result_red: #ffabab;
 $result_yellow: #ffffa0;
 $result_green: #abffab;
+$ubuntu_orange: #dd4814;
 
 
 h1 {
@@ -44,19 +45,49 @@ td {
   text-align:right;
 }
 
-.top_nav {
-  li {
-    list-style: none outside none;
-    float: left;
+#header {
+  position: relative;
+  #logo {
+    position: absolute;
+    right: 15px;
+    top: 15px;
   }
 
-  a {
-    color: black;
-    display: block;
-    font-weight: bold;
-    padding: 15px 15px 0px;
-    text-decoration: none;
+}
+
+#top_nav {
+  height: 64px;
+  margin: 0;
+  background: $ubuntu_orange url('/images/light_stripes.png') no-repeat;
+  font-size: 14px;
+  line-height: 16px;
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  -moz-box-shadow: 0 0 5px #555;
+  -webkit-box-shadow: 0 0 5px #555;
+  z-index: 2;  
+
+  ul {
+    list-style-type: none;
+    padding: 0 0 0 16px;
   }
+ 
+  li {
+    float: left;
+    font-size: 16px;
+    line-height: 16px;
+    background: url('/images/nav_divider.png') no-repeat;
+    padding: 0 0 0 2px;
+    height: 64px;
+    list-style: none outside none;
+}
+
+  a {
+    color: white;
+    text-decoration: none;
+    padding: 24px 8px;
+    display: block;
+    text-shadow: 0 1px black;}
 }
 
 .left_nav {
