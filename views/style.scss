@@ -40,8 +40,46 @@ td {
   background-color: $result_green;
 }
 
-
 .num {
   text-align:right;
 }
+
+.top_nav {
+  li {
+    list-style: none outside none;
+    float: left;
+  }
+
+  a {
+    color: black;
+    display: block;
+    font-weight: bold;
+    padding: 15px 15px 0px;
+    text-decoration: none;
+  }
+}
+
+.left_nav {
+  li {
+    list-style: none outside none;
+ #   float: left;
+  }
+
+  a {
+    color: black;
+    display: block;
+    font-weight: bold;
+    padding: 15px 15px 0px;
+    text-decoration: none;
+  }
+}
+
+
+
+
+.left_nav {
+
+}
+
+
 

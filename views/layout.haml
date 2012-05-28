@@ -18,13 +18,24 @@
     .container_15
       .grid_15
         %h1 Test Results Dashboard
-        %table
-          %tr
-            %td Smoke
-            %td Regression
-            %td LTS
-            %td Upgrade
-            %td Bootspeed
-            %td SRU
+        %ul.top_nav
+          %li 
+            %a{ :href => "/" }
+              Smoke
+          %li 
+            %a 
+              Regression
+          %li 
+            %a 
+              LTS
+          %li 
+            %a 
+              Upgrade
+          %li 
+            %a 
+              Bootspeed
+          %li 
+            %a 
+              SRU
     .container_15
       = yield
