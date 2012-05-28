@@ -1,23 +1,22 @@
 !!!
 %html
   %head
-    %link{ :rel => "stylesheet", :type => "text/css", :href => "/css/grid.css" }
-    %link{ :rel => "stylesheet", :type => "text/css", :href => "/css/jquery.dataTables.css" }
     %link{ :rel => "stylesheet", :type => "text/css", :href => "/css/style.css" }
+    %link{ :rel => "stylesheet", :type => "text/css", :href => "/css/grid.css" }
     %title Dashboard for Automated Testing - Ubuntu
-    %script{ :src => "http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" }
-    %script{ :src => "/js/jquery.dataTables.min.js" }
-  :javascript
-    $(document).ready(function() {
-      $(".data-table").dataTable({
-        "bPaginate": false
-      });
-    });
 
   %body
     .container_15
       .grid_15
         %h1 Test Results Dashboard
+        
+        %table{ :border => 0 }
+          %tr
+            %td <b> Smoke </b>
+            %td Regression
+            %td LTS
+            %td SRU
+            %td Upgrade
 
     .container_15
       = yield
