@@ -3,6 +3,8 @@ $result_red: #ffabab;
 $result_yellow: #ffffa0;
 $result_green: #abffab;
 $ubuntu_orange: #dd4814;
+$ubuntu_footer: #f7f6f5;
+$ubuntu_footer_font: #999;
 
 body {
   background: url('/images/bg_dot.png');
@@ -13,9 +15,8 @@ body {
 #content {
   background: white;
   border: 1px solid #ddd;
+  border-bottom: none;
   padding-bottom: 25px;
-  -moz-border-radius: 0px 0px 5px 5px;
-  -webkit-border-radius: 0px 0px 5px 5px;
 } 
 
 h1 {
@@ -122,6 +123,22 @@ td {
 .left_nav {
 
 }
+
+#footer {
+  font-size: 70%;
+  color: $ubuntu_footer_font;
+  text-align: left;
+  background: none repeat scroll 0 0 $ubuntu_footer;
+  margin: 0 auto;
+  -moz-border-radius: 0px 0px 5px 5px;
+  -webkit-border-radius: 0px 0px 5px 5px;
+  border: 1px solid #ddd;
+  border-top: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+}
+
 
 
 
