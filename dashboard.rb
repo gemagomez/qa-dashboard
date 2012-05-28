@@ -82,9 +82,3 @@ get "/build/:build" do
   haml :results_build
 
 end
-
-
-get "/jobs" do
-  @jobs = Job.all
-  haml :jobs
-end
