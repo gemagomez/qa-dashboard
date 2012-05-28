@@ -4,15 +4,25 @@ $result_yellow: #ffffa0;
 $result_green: #abffab;
 $ubuntu_orange: #dd4814;
 
+body {
+  background: url('/images/bg_dot.png');
+  margin: 0;
+  font-family: 'UbuntuBeta','Bitstream Vera Sans','DejaVu Sans',Tahoma,sans-serif;
+}
+
+#content {
+  background: white;
+  border: 1px solid #ddd;
+  padding-bottom: 25px;
+  -moz-border-radius: 0px 0px 5px 5px;
+  -webkit-border-radius: 0px 0px 5px 5px;
+} 
 
 h1 {
 }
 
 table {
   vertical-align: center;
-  
-
-
 }
 
 th {
@@ -46,30 +56,30 @@ td {
 }
 
 #header {
+  height: 64px;
+  background: $ubuntu_orange url('/images/light_stripes.png') repeat-x;
+  font-size: 14px;
+  line-height: 16px;
+  -moz-border-radius:  5px 5px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+  -moz-box-shadow: 0 0 5px #555;
+  -webkit-box-shadow: 0 0 5px #555;
+
   position: relative;
   #logo {
     position: absolute;
-    right: 15px;
+    right: 0px;
     top: 15px;
   }
 
 }
 
 #top_nav {
-  height: 64px;
-  margin: 0;
-  background: $ubuntu_orange url('/images/light_stripes.png') no-repeat;
-  font-size: 14px;
-  line-height: 16px;
-  -moz-border-radius: 0 0 5px 5px;
-  -webkit-border-radius: 0 0 5px 5px;
-  -moz-box-shadow: 0 0 5px #555;
-  -webkit-box-shadow: 0 0 5px #555;
-  z-index: 2;  
 
   ul {
     list-style-type: none;
     padding: 0 0 0 16px;
+    margin: 0;
   }
  
   li {
@@ -87,7 +97,8 @@ td {
     text-decoration: none;
     padding: 24px 8px;
     display: block;
-    text-shadow: 0 1px black;}
+    text-shadow: 0 1px black;
+  }
 }
 
 .left_nav {

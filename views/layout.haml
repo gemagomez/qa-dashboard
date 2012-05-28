@@ -15,31 +15,33 @@
     });
 
   %body
-    .container_15
+    .container_15.spacer.clearfix
+      .grid_15.spacer
+        &nbsp;
+    #header.container_15.clearfix
       .grid_15
-        #header
-          #top_nav
-            %ul
-              %li 
-                %a{ :href => "/" }
-                  Smoke
-              %li 
-                %a 
-                  Regression
-              %li 
-                %a 
-                  LTS
-              %li 
-                %a 
-                  Upgrade
-              %li 
-                %a 
-                  Bootspeed
-              %li 
-                %a 
-                  SRU
-              %li &nbsp;
-          %a#logo{ :href => "/" }
-            %img{ :src => "/images/header_logo.png", :alt => "Ubuntu QA" } 
-    .container_15
+        #top_nav.clearfix
+          %ul
+            %li 
+              %a{ :href => "/" }
+                Smoke
+            %li 
+              %a 
+                Regression
+            %li 
+              %a 
+                LTS
+            %li 
+              %a 
+                Upgrade
+            %li 
+              %a 
+                Bootspeed
+            %li 
+              %a 
+                SRU
+            %li &nbsp;
+        %a#logo{ :href => "/" }
+          %img{ :src => "/images/header_logo.png", :alt => "Ubuntu QA" } 
+    #content.container_15.clearfix
       = yield
