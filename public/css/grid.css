@@ -37,6 +37,10 @@
 .grid_12 {
 	POSITION: relative; DISPLAY: inline; FLOAT: left; MARGIN-LEFT: 10px; MARGIN-RIGHT: 10px
 }
+.grid_13 {
+	POSITION: relative; DISPLAY: inline; FLOAT: left; MARGIN-LEFT: 10px;
+MARGIN-RIGHT: 10px
+}
 .grid_15 {
 	POSITION: relative; DISPLAY: inline; FLOAT: left; MARGIN-LEFT: 10px; MARGIN-RIGHT: 10px
 }
@@ -81,6 +85,9 @@
 }
 .container_15 .grid_12 {
 	WIDTH: 940px
+}
+.container_15 .grid_13 {
+	WIDTH: 1020px;
 }
 .container_15 .grid_15 {
 	WIDTH: 1180px

@@ -5,6 +5,8 @@ $result_green: #abffab;
 $ubuntu_orange: #dd4814;
 $ubuntu_footer: #f7f6f5;
 $ubuntu_footer_font: #999;
+$link_color: $ubuntu_orange;
+$hover_yellow: $result_yellow;
 
 body {
   background: url('/images/bg_dot.png');
@@ -75,33 +77,43 @@ body {
 
   a {
     color: white;
-    text-decoration: none;
     padding: 24px 8px;
     display: block;
     text-shadow: 0 1px black;
   }
 }
 
-.left_nav {
-  li {
-    list-style: none outside none;
- #   float: left;
-  }
 
-  a {
-    color: black;
-    display: block;
-    font-weight: bold;
-    padding: 15px 15px 0px;
-    text-decoration: none;
+a {
+  color: $link_color;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
   }
 }
 
-
-
-
 .left_nav {
+  padding-left: 0px;
+  li {
+    list-style: none outside none;
+    padding-left: 5px;
+    padding-bottom: 3px;
+    &:hover {
+      background-color: lighten(#bbb, 20%);
+    } 
+  }
 
+  
+
+}
+
+
+h3.nav-title {
+  color: #aaa;
+  font-size: 80%;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-left: 5px;
 }
 
 #footer {
