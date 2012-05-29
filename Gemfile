@@ -10,5 +10,10 @@ gem "haml",         "~> 3.1.4"
 
 gem "sass",         "~> 3.1.15"
 
+# Graphics
+gem "rchart"
+gem "color"
+gem "gd2-ffij", :git => "git://github.com/bwalex/gd2-ffij.git"
 
+# Only for development
 gem "shotgun"

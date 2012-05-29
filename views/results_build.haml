@@ -17,10 +17,6 @@
     %span.crumb
       Build #{@build_id}
 
-  %ul
-    %li We need links to the jobs
-    %li What about extracting all the logs from jenkins and making them available on the dashboard? It doesn’t look very complicated and removes the jenkins middle man for triaging
-
   %h3 Summary
   
   %table{ :border => 0 }
@@ -38,7 +34,7 @@
         = @total_tests.to_s 
 
   %h3 Graph
-  Graph to be added
+  %img{ :src => "/build/pie/#{@build_id}", :alt => "Results pie chart" }
 
   %h3 Jobs details
 
