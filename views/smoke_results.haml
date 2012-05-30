@@ -1,0 +1,86 @@
+:javascript
+  $(document).ready(function() {
+    $(".data-table").dataTable({
+      "bPaginate": false,
+      "aaSorting": [[0, 'desc']]
+    });
+  });
+
+.grid_15
+
+  #breadcrumb
+    %span.crumb
+      %a{ :href => "/smoke/#{@release}" }
+        Smoke Testing 
+        = @release.capitalize
+    %span.crumb-sep
+      >>
+    %span.crumb
+      %a{ :href => "smoke/#{@release}/run/#{@image.run.id}" }
+      Image #{@image.run.build_no}
+    %span.crumb-sep
+      >>
+    %span.crumb
+      Results
+
+  %h3 
+    Results
+  
+  %table{ :border => 0 }
+    %tr
+      %td Pass Rate: 
+      %td.num
+        = format "%.0f\%", (@image.stats[:pass_rate]*100)
+    %tr
+      %td Total Tests Run:
+      %td.num
+        =  @image.stats[:total]
+    %tr
+      %td Total Tests Failed: 
+      %td.num
+        = @image.stats[:fail]
+    %tr
+      %td Total Tests Skipped:
+      %td.num
+        = @image.stats[:skip]
+
+  %h3 Graph
+  %img{ :src => "", :alt => "Results pie chart" }
+
+  %h3 Image aggregated results
+
+  %table.data-table
+    %thead
+      %tr
+        %th test
+        %th #total
+        %th #pass
+        %th #fail
+        %th #skip
+        %th pass rate
+        %th bugs
+        %th logs
+    %tbody
+      - for result in @results
+        %tr
+          %td
+            %a{ :href => result.jenkins_url }
+              = result.name
+          %td.num
+            = result.total_count
+          %td.num
+            = result.pass_count
+          %td.num
+            = result.fail_count
+          %td.num 
+            = result.skip_count
+          %td.num{ :class => "#{result_color(result.pass_rate)}" }
+            = format "%.0f\%", result.pass_rate*100
+          %td
+            - for bug in result.bugs
+              %span{ :class => "bug-#{bug.status}" }
+                %a{ :href => "https://bugs.launchpad.net/bugs/#{bug.bug_no}" }
+                  = "#{bug.bug_no} "
+          %td.num
+            %a{ :href => "/smoke/#{@release}/run/#{@image.run.id}/image/#{@image.id}/logs/#{result.id}" }
+              = result.result_logs.count

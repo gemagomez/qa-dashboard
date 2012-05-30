@@ -1,0 +1,74 @@
+:javascript
+  $(document).ready(function() {
+    $(".data-table").dataTable({
+      "bPaginate": false,
+      "aaSorting": [[0, 'desc']]
+    });
+  });
+
+.grid_15
+
+  #breadcrumb
+    %span.crumb
+      %a{ :href => "/smoke/#{@release}" }
+        Smoke Testing 
+        = @release.capitalize
+    %span.crumb-sep
+      >>
+    %span.crumb
+      Image #{@run.build_no}
+
+  %h3 
+    Summary of smoke testing for Ubuntu image #{@run.build_no}
+  
+  %table{ :border => 0 }
+    %tr
+      %td Pass Rate: 
+      %td.num
+        = format "%.0f\%", (@run.stats[:pass_rate]*100)
+    %tr
+      %td Total Tests Run:
+      %td.num
+        =  @run.stats[:total]
+    %tr
+      %td Total Tests Failed: 
+      %td.num
+        = @run.stats[:fail]
+    %tr
+      %td Total Tests Skipped:
+      %td.num
+        = @run.stats[:skip]
+
+  %h3 Graph
+  %img{ :src => "", :alt => "Results pie chart" }
+
+  %h3 Image aggregated results
+
+  %table.data-table
+    %thead
+      %tr
+        %th variant
+        %th arch
+        %th #total
+        %th #pass
+        %th #fail
+        %th #skip
+        %th pass rate
+    %tbody
+      - for image in @builds
+        %tr
+          %td
+            = image.variant
+          %td
+            = image.arch
+          %td.num
+            %a{ :href => "/smoke/#{@release}/run/#{@run.id}/image/#{image.id}" } 
+              = image.stats[:total]
+          %td.num
+            = image.stats[:pass]
+          %td.num
+            = image.stats[:fail]
+          %td.num 
+            = image.stats[:skip]
+          %td.num{ :class => "#{result_color(image.stats[:pass_rate])}" }
+            = format "%.0f\%", (image.stats[:pass_rate]*100) 

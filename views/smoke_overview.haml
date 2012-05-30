@@ -1,0 +1,50 @@
+:javascript
+  $(document).ready(function() {
+    $(".data-table").dataTable({
+      "bPaginate": false,
+      "aaSorting": [[0, 'desc']]
+    });
+  });
+
+.grid_15
+
+  %h2
+    = "Smoke testing for #{@release.capitalize}"
+
+.grid_2
+  %h3.nav-title
+    RELEASE
+  %ul.left_nav
+    - for release in @releases
+      %li 
+        %a{ :href => "/smoke/#{release}" } 
+          = release.capitalize
+
+
+.grid_13
+
+  %table.data-table
+    %thead
+      %tr
+        %th Build
+        %th Passed
+        %th Failed/Skipped
+        %th Total
+        %th Pass Rate
+        %th Bugs
+    %tbody
+      - for run in @runs
+        %tr
+          %td
+            %a{ :href => "/smoke/#{@release}/run/#{run.id}" } 
+              = run.build_no
+          %td.num
+            = run.stats[:pass]
+          %td.num
+            = run.stats[:fail]
+          %td.num
+            = run.stats[:total]
+          %td.num{ :class => "#{result_color(run.stats[:pass_rate])}" }
+            = format "%.0f\%", (run.stats[:pass_rate]*100) 
+          %td.num
+            = run.bug_count

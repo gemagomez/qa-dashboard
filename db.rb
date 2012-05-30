@@ -5,8 +5,41 @@ class ResultLog < ActiveRecord::Base
 end
 
 
+class Bug < ActiveRecord::Base
+  validates_presence_of   :bug_no
+  validates_uniqueness_of :bug_no
+end
+
+
 class Run < ActiveRecord::Base
   has_many    :builds
+
+  def stats
+    c = {}
+    c[:pass]  = 0
+    c[:fail]  = 0
+    c[:skip]  = 0
+    c[:total] = 0
+
+    builds.each do |b|
+      s = b.stats
+      c.each { |k,v| c[k] += s[k] }
+    end
+
+    c[:pass_rate] = (c[:total] == 0) ? 0.0 : c[:pass].to_f / c[:total].to_f
+
+    return c
+  end
+
+  def bug_count
+    c = 0
+    builds.each do |b|
+      c += b.bug_count       
+    end
+
+    return c    
+  end
+
 end
 
 
@@ -18,6 +51,7 @@ class Build < ActiveRecord::Base
   validates_associated  :run
 
   def stats
+    c = {}
     c[:pass]  = 0
     c[:fail]  = 0
     c[:skip]  = 0
@@ -25,21 +59,32 @@ class Build < ActiveRecord::Base
     c[:pass_rate] = 0
 
     results.each do |r|
-      c[:pass]  += c.pass_count
-      c[:fail]  += c.fail_count
-      c[:skip]  += c.skip_count
-      c[:total] += c.total_count
+      c[:pass]  += r.pass_count
+      c[:fail]  += r.fail_count
+      c[:skip]  += r.skip_count
+      c[:total] += r.total_count
     end
 
-    c[:pass_rate] = c.pass_count.to_f / c.total_count.to_f
+    c[:pass_rate] = (c[:total] == 0) ? 0.0 : c[:pass].to_f / c[:total].to_f
     return c
   end
+
+  def bug_count
+    c = 0
+    results.each do |r|
+      c += r.bug_count       
+    end
+
+    return c
+  end
+
 end
 
 
 class Result < ActiveRecord::Base
   belongs_to  :build
   has_many    :result_logs, :as => :log
+  has_many    :result_bugs
   has_many    :bugs, :through => :result_bugs
 
   validates_presence_of :build
@@ -48,6 +93,11 @@ class Result < ActiveRecord::Base
   def pass_rate
     pass_count.to_f / total_count.to_f
   end
+
+  def bug_count
+    bugs.count
+  end
+
 end
 
 
@@ -59,6 +109,7 @@ end
 class BootspeedResult < ActiveRecord::Base
   belongs_to  :bootspeed_run
   has_many    :result_logs, :as => :log
+  has_many    :bootspeed_result_bugs
   has_many    :bugs, :through => :bootspeed_result_bugs
 
   validates_presence_of :bootspeed_run

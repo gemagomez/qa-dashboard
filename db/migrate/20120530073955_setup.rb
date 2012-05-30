@@ -8,6 +8,7 @@ class Setup < ActiveRecord::Migration
       t.string      :mime_type
       t.string      :display_name
       t.text        :path
+      t.text        :remote_url
       t.timestamps
     end
 
@@ -24,6 +25,7 @@ class Setup < ActiveRecord::Migration
     create_table :runs do |t|
       t.string      :build_no
       t.string      :release
+      t.string      :flavor
       t.text        :sync_data
       t.integer     :test_type
       t.datetime    :ran_at

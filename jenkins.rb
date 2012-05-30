@@ -58,7 +58,9 @@ jobs.each do |job|
         build_info = get_jenkins_api("#{build_url}/api/json")
         building = build_info['building']
         build_desc = build_info['description']
-        build_date = Time.at(build_info['timestamp']).to_datetime
+        # Jenkins multiplies a unix timestamp by a factor of 1000 for some
+        # reason.
+        build_date = Time.at(build_info['timestamp']/1000).to_datetime
 
         # Skip this jenkins "build" if it hasn't finished yet
         next if building
@@ -86,7 +88,11 @@ jobs.each do |job|
 
         run = Run.where(:release => release, :build_no => build_no)
         if run.empty?
-          run = Run.create!(:release => release, :build_no => build_no)
+          run = Run.create!(
+            :release => release,
+            :flavor => flavor,
+            :build_no => build_no
+          )
         else
           run = run.first
         end
@@ -146,16 +152,21 @@ jobs.each do |job|
         build_info['artifacts'].each do |a|
           dir = "public/logs/#{result.id}"
           path = "#{dir}/#{a['fileName']}"
-
+          artifact_url = "#{build_url}/artifact/#{a['relativePath']}"
+          
           # Create directory if it doesn't exist
           Dir.mkdir('public/logs') unless File.exists?('public/logs')
           Dir.mkdir(dir) unless File.exists?(dir)
 
-          log = result.result_logs.create!(:display_name => a['displayPath'], :path => path)
-          artifact_url = "#{build_url}/artifact/#{a['relativePath']}"
+          log = result.result_logs.create!(
+            :display_name => a['displayPath'],
+            :remote_url => artifact_url,
+            :path => path
+          )
           puts "Pulling artifact from: #{artifact_url}"
-          req = SimpleHTTPRequest.new(artifact_url)
-          req.download(path)
+          # XXX: temporary commenting out
+          #req = SimpleHTTPRequest.new(artifact_url)
+          #req.download(path)
         end
       end
     end

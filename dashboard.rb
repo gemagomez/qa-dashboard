@@ -34,39 +34,38 @@ get "/css/style.css" do
   scss :style, :style => :expanded
 end
 
-
 get "/" do
-  @builds = []
-  build_ids = Result.select(:description).uniq.order("description DESC").map { |result| result.description }
-
-  for id in build_ids
-    if (id =~ /[0-9]{8}.*/)
-      results = Result.where(:description => id)
-      failed = 0
-      total = 0
-      results.each do |res|
-        failed += res.failcount.to_i + res.skipcount.to_i
-        total  += res.totalcount.to_i
-      end
-      successes = total.to_i - failed.to_i
-      pass_rate = (total == 0) ? 0.0 : successes/total.to_f
-      # TODO: Add bug counter and link to bugs
-      bugs = 0
-
-      @builds << { :id => id, 
-                   :pass => successes, 
-                   :fail => (total.to_i - successes.to_i), 
-                   :total => total, 
-                   :pass_rate => pass_rate,
-                   :bugs => bugs
-                  }
-    end
-  end
-
-  haml :build_overview
+  # XXX: put default release in config file
+  redirect '/smoke/quantal'
 end
 
-# Move this to the data model when the table results and the table builds are available
+# Smoke testing aggregated view for a release 
+get "/smoke/:release" do
+  @release  = params[:release]
+  @releases = Run.select(:release).uniq.order("release DESC").map { |run| run.release }
+  @runs = Run.where(:release => @release)
+
+  haml :smoke_overview
+end
+
+# Smoke testing aggregated view for a particular build_no and release
+get "/smoke/:release/run/:id" do
+  @release = params[:release]
+  @run     = Run.find(params[:id])
+  @builds  = @run.builds
+
+  haml :smoke_build_overview
+end
+
+get "/smoke/:release/run/:run_id/image/:image_id" do
+  @release  = params[:release]
+  @image    = Build.find(params[:image_id])
+  @results  = @image.results
+
+  haml :smoke_results
+end
+
+# XXX: Move this to the data model when the table results and the table builds are available
 get '/build/pie/:build' do
   content_type :png
   @build_id = params[:build]
@@ -95,23 +94,4 @@ get '/build/pie/:build' do
 end
 
 
-get "/build/:build" do
-  @build_id = params[:build]
-  @results_build = Result.where(:description => params[:build])
 
-
-  @total_tests = 0
-  @total_fail = 0
-  @total_skipped = 0
-
-  for result in @results_build
-    @total_fail += result.failcount.to_i
-    @total_skipped += result.skipcount.to_i
-    @total_tests += result.totalcount.to_i
-  end
-  
-
-
-  haml :results_build
-
-end
