@@ -10,10 +10,17 @@ gem "haml",         "~> 3.1.4"
 
 gem "sass",         "~> 3.1.15"
 
+gem "oauth", "~> 0.4.6"
+gem "json", "~> 1.6.6"
+
+gem "foreigner", "~> 1.1.5"
+
+gem "pg", "~> 0.13.2"
+
 # Graphics
-gem "rchart"
-gem "color"
+gem "rchart", "~> 2.0.4"
+gem "color", "~> 1.4.1"
 gem "gd2-ffij", :git => "https://github.com/bwalex/gd2-ffij.git"
 
 # Only for development
-gem "shotgun"
+gem "shotgun", "~> 0.9"

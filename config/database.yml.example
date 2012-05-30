@@ -1,0 +1,6 @@
+adapter:   postgresql
+host:      localhost
+username:  your_username
+password:  
+database:  qa_dashboard
+
