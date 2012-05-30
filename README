@@ -1,13 +1,16 @@
 To install the application:
 
-  sudo apt-get install ruby1.9.3 libsqlite3-dev make libgd2-xpm
-  sudo gem install bundle 
+  sudo apt-get install ruby1.9.3 libpq-dev make libgd2-xpm
+  sudo gem install bundle
 
   bundle install
-
-Put the database inside the project folder:
-  data/quantal.sqlite
 
 To run the application:
 
   bundle exec ruby dashboard.rb
+
+To create the database, change to user postgres and do psql:
+
+  CREATE USER user;
+  CREATE DATABASE qa_dashboard;
+  GRANT ALL PRIVILEGES ON DATABASE qa_dashboard TO user;
