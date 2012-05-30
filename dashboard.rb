@@ -34,10 +34,12 @@ get "/css/style.css" do
   scss :style, :style => :expanded
 end
 
+
 get "/" do
   # XXX: put default release in config file
   redirect '/smoke/quantal'
 end
+
 
 # Smoke testing aggregated view for a release 
 get "/smoke/:release" do
@@ -48,6 +50,7 @@ get "/smoke/:release" do
   haml :smoke_overview
 end
 
+
 # Smoke testing aggregated view for a particular build_no and release
 get "/smoke/:release/run/:id" do
   @release = params[:release]
@@ -57,6 +60,7 @@ get "/smoke/:release/run/:id" do
   haml :smoke_build_overview
 end
 
+
 get "/smoke/:release/run/:run_id/image/:image_id" do
   @release  = params[:release]
   @image    = Build.find(params[:image_id])
@@ -64,6 +68,55 @@ get "/smoke/:release/run/:run_id/image/:image_id" do
 
   haml :smoke_results
 end
+
+
+get "/smoke/:release/run/:run_id/image/:image_id/logs/:result_id" do
+  @release = params[:release]
+  @result  = Result.find(params[:result_id])
+  @image   = Build.find(params[:image_id])
+  @logs    = @result.result_logs
+
+  haml :smoke_result_logs
+end
+
+
+get "/smoke/:release/run/:run_id/pie" do
+  content_type :png
+
+  @run   = Run.find(params[:run_id])
+  @stats = @run.stats
+
+  EasyPlot::EasyPlot.pie_chart(
+    {
+      'Passed' => { :value => @stats[:pass], :color => "#abffab" },
+      'Failed' => { :value => @stats[:fail], :color => "#ffabab" },
+      'Skipped' => { :value => @stats[:skip], :color => "#dd4814" }
+    },
+    {
+      :width => 400, :height => 400, :explosion => 2, :font => { "tahoma.ttf" => 10 }
+    }
+  )   
+end
+
+
+get "/smoke/:release/run/:run_id/image/:image_id/pie" do
+  content_type :png
+
+  @image = Build.find(params[:image_id])
+  @stats = @image.stats
+
+  EasyPlot::EasyPlot.pie_chart(
+    {
+      'Passed' => { :value => @stats[:pass], :color => "#abffab" },
+      'Failed' => { :value => @stats[:fail], :color => "#ffabab" },
+      'Skipped' => { :value => @stats[:skip], :color => "#dd4814" }
+    },
+    {
+      :width => 400, :height => 400, :explosion => 2, :font => { "tahoma.ttf" => 10 }
+    }
+  ) 
+end
+
 
 # XXX: Move this to the data model when the table results and the table builds are available
 get '/build/pie/:build' do

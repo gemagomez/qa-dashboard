@@ -86,7 +86,7 @@ jobs.each do |job|
           end
         end
 
-        run = Run.where(:release => release, :build_no => build_no)
+        run = Run.where(:release => release, :flavor => flavor, :build_no => build_no)
         if run.empty?
           run = Run.create!(
             :release => release,

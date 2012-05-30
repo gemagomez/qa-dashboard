@@ -27,6 +27,7 @@
     %thead
       %tr
         %th Build
+        %th Flavor
         %th Passed
         %th Failed/Skipped
         %th Total
@@ -38,6 +39,8 @@
           %td
             %a{ :href => "/smoke/#{@release}/run/#{run.id}" } 
               = run.build_no
+          %td
+            = run.flavor
           %td.num
             = run.stats[:pass]
           %td.num

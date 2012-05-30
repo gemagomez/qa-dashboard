@@ -34,6 +34,7 @@ class Setup < ActiveRecord::Migration
 
     add_index :runs, :release, :unique => false
     add_index :runs, :build_no, :unique => false
+    add_index :runs, :flavor, :unique => false
 
 
     create_table :builds do |t|

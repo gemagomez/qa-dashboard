@@ -21,7 +21,7 @@
     %span.crumb-sep
       >>
     %span.crumb
-      Results
+      = "Results for #{@image.run.flavor}-#{@image.variant}-#{@image.arch}"
 
   %h3 
     Results
@@ -45,7 +45,7 @@
         = @image.stats[:skip]
 
   %h3 Graph
-  %img{ :src => "", :alt => "Results pie chart" }
+  %img{ :src => "/smoke/#{@release}/run/#{@image.run.id}/image/#{@image.id}/pie", :alt => "Results pie chart" }
 
   %h3 Image aggregated results
 
