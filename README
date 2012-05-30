@@ -1,6 +1,6 @@
 To install the application:
 
-  sudo apt-get install ruby1.9.3 libsqlite3-dev
+  sudo apt-get install ruby1.9.3 libsqlite3-dev make libgd2-xpm
   sudo gem install bundle 
 
   bundle install
