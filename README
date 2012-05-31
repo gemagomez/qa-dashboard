@@ -1,6 +1,6 @@
 To install the application:
 
-  sudo apt-get install ruby1.9.3 libpq-dev make libgd2-xpm
+  sudo apt-get install ruby1.9.3 libpq-dev make libgraphicsmagick1-dev libmagickcore-dev libmagickwand-dev
   sudo gem install bundle
 
   bundle install

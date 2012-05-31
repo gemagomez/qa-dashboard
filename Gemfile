@@ -18,9 +18,9 @@ gem "foreigner", "~> 1.1.5"
 gem "pg", "~> 0.13.2"
 
 # Graphics
-gem "rchart", "~> 2.0.4"
+gem "gruff", "~> 0.3.6"
+gem "rmagick", "~> 2.13.1"
 gem "color", "~> 1.4.1"
-gem "gd2-ffij", :git => "https://github.com/bwalex/gd2-ffij.git"
 
 # Only for development
 gem "shotgun", "~> 0.9"

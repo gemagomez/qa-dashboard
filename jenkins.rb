@@ -52,7 +52,7 @@ jobs.each do |job|
       puts "DEBUG: fetching job from #{url}/api/json"
       job_info = get_jenkins_api("#{url}/api/json")
       builds = job_info['builds']
-      builds.each do |build|
+      builds.sort{ |x,y| y['number'].to_i <=> x['number'].to_i }.each do |build|
         build_number = build['number']
         build_url = build['url']
         build_info = get_jenkins_api("#{build_url}/api/json")
@@ -114,7 +114,11 @@ jobs.each do |job|
         # build.results.where
         puts "moo"
         results = build.results.where(:jenkins_build => build_number.to_s, :name => name) #, :ran_at => build_date)
-        next unless results.empty?
+
+        # We do assume that the builds are in order with newest on top. That being
+        # the case, we can safely assume that if we find the current result,
+        # there is no point in going any further.
+        break unless results.empty?
 
         fail_count = 0
         skip_count = 0
