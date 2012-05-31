@@ -40,7 +40,10 @@
         = @run.stats[:skip]
 
   %h3 Graph
-  %img{ :src => "/smoke/#{@release}/run/#{@run.id}/pie", :alt => "Results pie chart" }
+  - if @run.stats[:total] > 0 
+    %img{ :src => "/smoke/#{@release}/run/#{@run.id}/pie", :alt => "Results pie chart" }
+  - else 
+    No tests run... no chart. Please, run some tests!
 
   %h3 Image aggregated results
 

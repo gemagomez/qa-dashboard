@@ -76,7 +76,7 @@ end
 get "/smoke/:release/run/:run_id/pie" do
   content_type :png
 
-  @run   = Run.find(params[:run_id])
+  @run   = Run.includes(:builds => { :results => [ :result_bugs ] }).find(params[:run_id])
   @stats = @run.stats
 
   EasyPlot::EasyPlot.pie_chart(
@@ -96,7 +96,8 @@ end
 get "/smoke/:release/run/:run_id/image/:image_id/pie" do
   content_type :png
 
-  @image = Build.find(params[:image_id])
+  @image = Build.includes(:results => [ :result_bugs ]).find(params[:image_id])
+
   @stats = @image.stats
 
   EasyPlot::EasyPlot.pie_chart(
