@@ -107,7 +107,7 @@ class Result < ActiveRecord::Base
   validates_associated  :build
 
   def pass_rate
-    pass_count.to_f / total_count.to_f
+    (total_count == 0) ? 0.0 : pass_count.to_f / total_count.to_f
   end
 
   def bug_count
