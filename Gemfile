@@ -17,6 +17,10 @@ gem "foreigner", "~> 1.1.5"
 
 gem "pg", "~> 0.13.2"
 
+gem "unicorn", "~> 4.2.1"
+gem "rack-cache", "~> 1.2"
+gem "dalli", "~> 2.0.2"
+
 # Graphics
 gem "gruff", "~> 0.3.6"
 gem "rmagick", "~> 2.13.1"
