@@ -106,6 +106,7 @@ jobs.each do |job|
           :variant => variant,
           :arch => arch,
           :flavor => flavor)
+          run.touch
         else
           build = build.first
         end
@@ -142,15 +143,21 @@ jobs.each do |job|
           :pass_count => pass_count,
           :total_count => total_count
         )
+        build.touch
+        run.touch
 
         lp_bugs.each do |bug_no|
           bug = Bug.where(:bug_no => bug_no)
           if bug.empty?
             bug = Bug.create!(:bug_no => bug_no)
+            result.touch
+            build.touch
+            run.touch
           else
             bug = bug.first
           end
           result.bugs << bug
+          result.save
         end
 
         build_info['artifacts'].each do |a|
@@ -171,6 +178,9 @@ jobs.each do |job|
           # XXX: temporary commenting out
           #req = SimpleHTTPRequest.new(artifact_url)
           #req.download(path)
+          result.touch
+          build.touch
+          run.touch
         end
       end
     end

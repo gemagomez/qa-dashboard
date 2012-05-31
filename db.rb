@@ -78,10 +78,8 @@ class Build < ActiveRecord::Base
 
   def bug_count
     c = 0
-    results.each do |r|
-      c += r.bug_count       
-    end
-
+    
+    results.each { |r| c += r.bug_count }
     return c
   end
 
@@ -108,7 +106,7 @@ class Result < ActiveRecord::Base
   end
 
   def bug_count
-    bugs.count
+    result_bugs.length
   end
 
   def as_json(options={})

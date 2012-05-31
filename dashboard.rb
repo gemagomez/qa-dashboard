@@ -38,7 +38,7 @@ end
 get "/smoke/:release" do
   @release  = params[:release]
   @releases = Run.select(:release).uniq.order("release DESC").map { |run| run.release }
-  @runs = Run.where(:release => @release)
+  @runs = Run.where(:release => @release).includes(:builds => { :results => [ :result_bugs ] })
 
   haml :smoke_overview
 end
@@ -48,7 +48,7 @@ end
 get "/smoke/:release/run/:id" do
   @release = params[:release]
   @run     = Run.find(params[:id])
-  @builds  = @run.builds
+  @builds  = @run.builds.includes(:results => [ :result_bugs ])
 
   haml :smoke_build_overview
 end
@@ -57,7 +57,7 @@ end
 get "/smoke/:release/run/:run_id/image/:image_id" do
   @release  = params[:release]
   @image    = Build.find(params[:image_id])
-  @results  = @image.results
+  @results  = @image.results.includes(:result_bugs)
 
   haml :smoke_results
 end
@@ -118,38 +118,38 @@ end
 get "/api/smoke/run" do
   content_type :json
   
-  Run.all.to_json
+  Run.includes(:builds => { :results => [ :result_bugs ] }).all.to_json
 end
 
 get "/api/smoke/run/:run_id" do
   content_type :json
 
-  Run.find(params[:run_id]).to_json
+  Run.includes(:builds => { :results => [ :result_bugs ] }).find(params[:run_id]).to_json
 end
 
 get "/api/smoke/run/:run_id/image" do
   content_type :json
 
-  Run.find(params[:run_id]).builds.all.to_json
+  Run.find(params[:run_id]).builds.includes(:results => [ :result_bugs ]).all.to_json
 end
 
 get "/api/smoke/run/:run_id/image/:image_id" do
   content_type :json
 
-  Build.find(params[:image_id]).to_json
+  Build.includes(:results => [ :result_bugs ]).find(params[:image_id]).to_json
 end
 
 get "/api/smoke/run/:run_id/image/:image_id/result" do
   content_type :json
 
-  Build.find(params[:image_id]).results.all.to_json
+  Build.find(params[:image_id]).results.includes(:result_bugs, :result_logs, :bugs).all.to_json
 end
 
 
 get "/api/smoke/run/:run_id/image/:image_id/result/:result_id" do
   content_type :json
 
-  Result.find(params[:result_id]).to_json
+  Result.includes(:result_bugs).find(params[:result_id]).to_json
 end
 
 get "/api/help" do
