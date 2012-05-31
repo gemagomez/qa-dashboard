@@ -120,5 +120,48 @@ get "/smoke/:release/run/:run_id/image/:image_id/pie" do
 end
 
 
+# API for external users to do their own data manipulation
+
+get "/api/smoke/run" do
+  content_type :json
+  
+  Run.all.to_json
+end
+
+get "/api/smoke/run/:run_id" do
+  content_type :json
+
+  Run.find(params[:run_id]).to_json
+end
+
+get "/api/smoke/run/:run_id/image" do
+  content_type :json
+
+  Run.find(params[:run_id]).builds.all.to_json
+end
+
+get "/api/smoke/run/:run_id/image/:image_id" do
+  content_type :json
+
+  Build.find(params[:image_id]).to_json
+end
+
+get "/api/smoke/run/:run_id/image/:image_id/result" do
+  content_type :json
+
+  Build.find(params[:image_id]).results.all.to_json
+end
+
+
+get "/api/smoke/run/:run_id/image/:image_id/result/:result_id" do
+  content_type :json
+
+  Result.find(params[:result_id]).to_json
+end
+
+get "/api/help" do
+
+  haml :api_help
+end
 
 

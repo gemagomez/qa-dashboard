@@ -1,0 +1,25 @@
+.grid_3
+
+.grid_12
+  %h3 
+    API Documentation
+
+  %table
+    %tr
+      %td /api/smoke/run 
+      %td gives all runs
+    %tr 
+      %td /api/smoke/run/:run_id
+      %td gives a specific run (including image ids)
+    %tr
+      %td /api/smoke/run/:run_id/image 
+      %td gives all images (ISOs) for that specific run
+    %tr
+      %td /api/smoke/run/:run_id/image/:image_id 
+      %td gives a specific image, or builds, (including result ids)
+    %tr
+      %td /api/smoke/run/:run_id/image/:image_id/result
+      %td gives you all results with logs and bugs
+    %tr
+      %td /api/smoke/run/:run_id/image/:image_id/result/:id
+      %td gives a specific result with logs and bugs

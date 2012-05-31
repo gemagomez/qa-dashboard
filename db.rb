@@ -40,6 +40,13 @@ class Run < ActiveRecord::Base
     return c    
   end
 
+  def as_json(options={})
+    super(
+      :methods => [ :stats, :bug_count ],
+      :include => { :builds => { :only => [ :id ] } }
+    )
+  end
+
 end
 
 
@@ -78,6 +85,12 @@ class Build < ActiveRecord::Base
     return c
   end
 
+  def as_json(options={})
+    super(
+      :methods => [ :stats, :bug_count ],
+      :include => { :results => { :only => [ :id ] } }
+    )
+  end
 end
 
 
@@ -98,6 +111,12 @@ class Result < ActiveRecord::Base
     bugs.count
   end
 
+  def as_json(options={})
+    super(
+      :methods => [ :pass_rate, :bug_count ],
+      :include => { :bugs => { :only => [ :bug_no, :status ] }, :result_logs => {:only => [ :remote_url, :path ] } }
+    )
+  end
 end
 
 
