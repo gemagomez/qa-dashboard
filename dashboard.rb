@@ -81,9 +81,8 @@ get "/smoke/:release/run/:run_id/pie" do
 
   EasyPlot::EasyPlot.pie_chart(
     {
-      'Passed' => { :value => @stats[:pass], :color => "#abffab" },
-      'Failed' => { :value => @stats[:fail], :color => "#ffabab" },
-      'Skipped' => { :value => @stats[:skip], :color => "#dd4814" }
+      'Passed' => { :value => @stats[:pass_rate], :color => "#abffab" },
+      'Failed' => { :value => (1-@stats[:pass_rate]), :color => "#ffabab" }
     },
     {
       :width => 600,

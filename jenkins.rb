@@ -29,7 +29,8 @@ jobs.each do |job|
     # Upgrade tests
     #puts "Upgrade test, name: #{name}"
 
-  when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate)/
+ # when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate)/
+  when /^(quantal)-(desktop|server|alternate)/
     # Smoke tests
     puts "Smoke test, name: #{name}"
     flavor = 'ubuntu'

@@ -21,12 +21,17 @@ class Run < ActiveRecord::Base
     c[:skip]  = 0
     c[:total] = 0
 
+    builds_pass = 0
+    builds_total = 0
+
     builds.each do |b|
       s = b.stats
       c.each { |k,v| c[k] += s[k] }
+      builds_pass += 1 if (s[:pass_rate] == 1)
+      builds_total += 1
     end
 
-    c[:pass_rate] = (c[:total] == 0) ? 0.0 : c[:pass].to_f / c[:total].to_f
+    c[:pass_rate] = (builds_total == 0) ? 0.0 : builds_pass.to_f / builds_total.to_f
 
     return c
   end

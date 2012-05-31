@@ -29,9 +29,10 @@
         %th Build
         %th Flavor
         %th Passed
-        %th Failed/Skipped
+        %th Failed
+        %th Skipped
         %th Total
-        %th Pass Rate
+        %th Image Pass Rate
         %th Bugs
     %tbody
       - for run in @runs
@@ -46,8 +47,11 @@
           %td.num
             = run.stats[:fail]
           %td.num
+            = run.stats[:skip]
+          %td.num
             = run.stats[:total]
           %td.num{ :class => "#{result_color(run.stats[:pass_rate])}" }
-            = format "%.0f\%", (run.stats[:pass_rate]*100) 
+            = format "%.0f\%", run.stats[:pass_rate]*100
           %td.num
             = run.bug_count
+         
