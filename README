@@ -7,7 +7,7 @@ To install the application:
 
 To run the application:
 
-  bundle exec ruby dashboard.rb
+  bundle exec unicorn -c unicorn.rb
 
 To create the database, change to user postgres and do psql:
 
