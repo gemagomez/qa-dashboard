@@ -171,7 +171,7 @@ jobs.each do |job|
           Dir.mkdir(dir) unless File.exists?(dir)
 
           log = result.result_logs.create!(
-            :display_name => a['displayPath'],
+            :display_name => a['relativePath'],
             :remote_url => artifact_url,
             :path => path
           )
