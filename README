@@ -9,6 +9,16 @@ To run the application:
 
   bundle exec unicorn -c unicorn.rb
 
+To pull jobs from jenkins (add to crontab -e every hour or so):
+
+  bundle exec rake jenkins:pull
+
+To discard the database and repopulate from empty with the previous command
+for instance to point to a different jenkins server and reset your database, 
+first run:
+
+bundle exec rake db:migrate VERSION=0 && bundle exec rake db:migrate
+
 To create the database, change to user postgres and do psql:
 
   CREATE USER user;
