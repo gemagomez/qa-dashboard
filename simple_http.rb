@@ -79,6 +79,8 @@ class SimpleHTTPRequest
       elsif expected_content_type == 'form'
         d = URI.decode_www_form(@res.body)
         return Hash[d]
+      elsif expected_content_type == 'text'
+        return @res.body
       end
     else
       return nil
