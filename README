@@ -24,3 +24,4 @@ To create the database, change to user postgres and do psql:
   CREATE USER user;
   CREATE DATABASE qa_dashboard;
   GRANT ALL PRIVILEGES ON DATABASE qa_dashboard TO user;
+  ALTER USER user PASSWORD 'password';
