@@ -29,8 +29,8 @@ jobs.each do |job|
     # Upgrade tests
     #puts "Upgrade test, name: #{name}"
 
- # when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate)/
-  when /^(quantal)-(desktop|server|alternate)/
+  when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate)/
+  #when /^(quantal)-(desktop|server|alternate)/
     # Smoke tests
     puts "Smoke test, name: #{name}"
     flavor = 'ubuntu'
@@ -39,7 +39,10 @@ jobs.each do |job|
         b = name.scan(/(.*)-(.*)/).first
         release = b[0]
         variant = b[1]
+        arch    = "ec2"
         # XXX; need to look inside job for the rest of the info
+        # ec2 do not seem to be part of smoke testing anymore
+        # matrixes reporting: https://jenkins.qa.ubuntu.com/job/lucid-server-ec2/2/testReport/api/json
       end
     else
       b = name.scan(/(.*)-(.*)-(.*)_(.*)/).first
@@ -68,24 +71,37 @@ jobs.each do |job|
 
         # Extract build_no and bug from build_desc
         #
-        # If the description doesn't contain a build number,
-        # make one up based on the date
-        build_no = build_date.strftime("%Y%m%d")
+        # Our preferred source for the build_no is the mediainfo
+        # artifact. If that fails, try to find a build_no in the
+        # description of the build.
+        # If all else fails, make one up based on the run date.
         lp_bugs = []
+        build_no = nil
+
+        # Try to extract build_no from mediainfo artifact
+        req = SimpleHTTPRequest.new("#{build_url}/artifact/media_info")
+        media_info = req.result('text')
+        unless media_info.nil?
+          s = media_info.scan(/^.*\((.+)\)$/).first
+          build_no = s[0]
+        end
 
         if not build_desc.nil?
           b = build_desc.split(',')
           b.each do |s|
             s.strip!
-            if s.match(/^[0-9]{8}(\.[0-9]+)?$/)
+            if s.match(/^[0-9]{8}(\.[0-9]+)?$/) and build_no.nil?
               # It's a build number
-              build_no = s
+              build_no = "#{s} ?"
             elsif s.match(/^LP:#[0-9]+$/)
               # It's an LP bug; strip the "LP:#" prefix and add it
               lp_bugs << s[4..-1]
             end
           end
         end
+
+        build_no = build_date.strftime("%Y%m%d ?") if build_no.nil?
+
 
         run = Run.where(:release => release, :flavor => flavor, :build_no => build_no)
         if run.empty?
@@ -165,7 +181,7 @@ jobs.each do |job|
           dir = "public/logs/#{result.id}"
           path = "#{dir}/#{a['fileName']}"
           artifact_url = "#{build_url}/artifact/#{a['relativePath']}"
-          
+
           # Create directory if it doesn't exist
           Dir.mkdir('public/logs') unless File.exists?('public/logs')
           Dir.mkdir(dir) unless File.exists?(dir)
