@@ -30,7 +30,9 @@ jobs.each do |job|
     #puts "Upgrade test, name: #{name}"
 
   #when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
-  when /^(quantal)-(desktop|server|alternate)/
+  #when /^(quantal)-(desktop|server|alternate|core)/
+  when /^(quantal)-(core)/
+
     # Smoke tests
     puts "Smoke test, name: #{name}"
     flavor = 'ubuntu'
@@ -44,17 +46,23 @@ jobs.each do |job|
         # ec2 do not seem to be part of smoke testing anymore
         # matrixes reporting: https://jenkins.qa.ubuntu.com/job/lucid-server-ec2/2/testReport/api/json
       end
-    else
-      b = name.scan(/(.*)-(.*)-(.*)_(.*)/).first
-      release = b[0]
-      variant = b[1]
-      arch    = b[2]
-      if name.nil? 
-        name = "core"
-      else
-        name = b[3]
-      end
 
+    else
+      if name.match /(.*)-(.*)-(.*)_(.*)/
+        b = name.scan(/(.*)-(.*)-(.*)_(.*)/).first
+        release = b[0]
+        variant = b[1]
+        arch    = b[2]
+        name = b[3]
+      elsif name.match /(.*)-(.*)-(.*)/
+        # quantal-core-amd64, quantal-core-armhf and quantal-core-i386 are 
+        # parsed here
+        b = name.scan(/(.*)-(.*)-(.*)/).first
+        release = b[0]
+        variant = b[1]
+        arch = b[2]
+        name = "default_test"
+      end
 
       puts "Relase: #{release}, Variant: #{variant}, arch: #{arch}, name: #{name}"
 
@@ -106,7 +114,7 @@ jobs.each do |job|
           end
         end
 
-        if(name == "core")
+        if(variant == "core")
           build_no = build_date.strftime("%Y%m%d") if build_no.nil?
         else
           build_no = build_date.strftime("%Y%m%d ?") if build_no.nil?
