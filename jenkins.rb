@@ -29,9 +29,10 @@ jobs.each do |job|
     # Upgrade tests
     #puts "Upgrade test, name: #{name}"
 
-  when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
+  #when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(core)/
+  when /^(precise|quantal)-(desktop|server|alternate|core)/
 
     # Smoke tests
     puts "Smoke test, name: #{name}"
