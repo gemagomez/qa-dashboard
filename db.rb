@@ -27,7 +27,7 @@ class Run < ActiveRecord::Base
     builds.each do |b|
       s = b.stats
       c.each { |k,v| c[k] += s[k] }
-      builds_pass += 1 if (s[:pass_rate] == 1)
+      builds_pass += s[:pass_rate]
       builds_total += 1
     end
 
