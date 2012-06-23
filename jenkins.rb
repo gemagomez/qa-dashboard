@@ -29,8 +29,8 @@ jobs.each do |job|
     # Upgrade tests
     #puts "Upgrade test, name: #{name}"
 
-  when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate)/
-  #when /^(quantal)-(desktop|server|alternate)/
+  #when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
+  when /^(quantal)-(desktop|server|alternate)/
     # Smoke tests
     puts "Smoke test, name: #{name}"
     flavor = 'ubuntu'
@@ -49,7 +49,12 @@ jobs.each do |job|
       release = b[0]
       variant = b[1]
       arch    = b[2]
-      name    = b[3]
+      if name.nil? 
+        name = "core"
+      else
+        name = b[3]
+      end
+
 
       puts "Relase: #{release}, Variant: #{variant}, arch: #{arch}, name: #{name}"
 
@@ -87,7 +92,7 @@ jobs.each do |job|
         end
 
         if not build_desc.nil?
-          b = build_desc.split(',')
+          b = build_desc.split(/(\s+|,)/)
           b.each do |s|
             s.strip!
             if s.match(/^[0-9]{8}(\.[0-9]+)?$/) and build_no.nil?
@@ -95,12 +100,17 @@ jobs.each do |job|
               build_no = "#{s} ?"
             elsif s.match(/^LP:#[0-9]+$/)
               # It's an LP bug; strip the "LP:#" prefix and add it
+              puts "lp_bug:#{s}, [#{s[4..-1]}]"
               lp_bugs << s[4..-1]
             end
           end
         end
 
-        build_no = build_date.strftime("%Y%m%d ?") if build_no.nil?
+        if(name == "core")
+          build_no = build_date.strftime("%Y%m%d") if build_no.nil?
+        else
+          build_no = build_date.strftime("%Y%m%d ?") if build_no.nil?
+        end
 
 
         run = Run.where(:release => release, :flavor => flavor, :build_no => build_no)
@@ -129,8 +139,6 @@ jobs.each do |job|
         end
 
         puts("build.id = #{build.id}, build_number = #{build_number.to_s}, name = #{name}")
-        # build.results.where
-        puts "moo"
         results = build.results.where(:jenkins_build => build_number.to_s, :name => name) #, :ran_at => build_date)
 
         # We do assume that the builds are in order with newest on top. That being
