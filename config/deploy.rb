@@ -41,6 +41,8 @@ set :deploy_to, "/home/gema/qa-dashboard"
 after :deploy, :configuration
 
 task :configuration do
+  run "rm /home/gema/qa-dashboard/current/config/database.yml"
+  run "rm /home/gema/qa-dashboard/current/config/config.yml"
   run "ln -s /home/gema/dash-config/database.yml /home/gema/qa-dashboard/current/config/database.yml"
   run "ln -s /home/gema/dash-config/config.yml /home/gema/qa-dashboard/current/config/config.yml"
   restart
