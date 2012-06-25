@@ -4,3 +4,4 @@ Gemfile.lock
 data
 database.yml
 config.yml
+*.swp
