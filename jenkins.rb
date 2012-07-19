@@ -32,7 +32,7 @@ jobs.each do |job|
   #when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(core)/
-  when /^(precise|quantal)-(desktop|server|alternate|core)/
+  when /^(aprecise|aquantal)-(desktop|server|alternate|core)/
 
     # Smoke tests
     puts "Smoke test, name: #{name}"
@@ -54,15 +54,7 @@ jobs.each do |job|
         release = b[0]
         variant = b[1]
         arch    = b[2]
-        name = b[3]
-      elsif name.match /(.*)-(.*)-(.*)/
-        # quantal-core-amd64, quantal-core-armhf and quantal-core-i386 are 
-        # parsed here
-        b = name.scan(/(.*)-(.*)-(.*)/).first
-        release = b[0]
-        variant = b[1]
-        arch = b[2]
-        name = "default_test"
+        name    = b[3]
       end
 
       puts "Relase: #{release}, Variant: #{variant}, arch: #{arch}, name: #{name}"
@@ -219,10 +211,25 @@ jobs.each do |job|
       end
     end
 
-  when /^sru-kernel/
+  when /^sru_kernel/
     # Kernel SRU tests
-    #puts "Kernel SRU test, name: #{name}"
+    puts "Kernel SRU test, name: #{name}"
 
+    if name.match /sru_kernel-(.*)-(.*)-(.*)-(.*)/
+      b = name.scan(/sru_kernel-(.*)-(.*)-(.*)-(.*)/).first
+      release        = b[0]
+      kernel_version = b[1]
+      arch           = b[2]
+      graph_card     = b[3]
+    end
+    
+    puts "Release: #{b[0]}, Kernel version: #{b[1]}, Architecture: #{b[2]}, Graphics card: #{b[3]}"
+    
+    puts "DEBUG: fetching job from #{url}/api/json"
+    job_info = get_jenkins_api("#{url}/api/json")
+
+    puts "JSON: #{job_info}"
+    
   else
     # Unknown test
     #puts "Unknown test, name: #{name}"

@@ -1,6 +1,5 @@
 class Setup < ActiveRecord::Migration
   def self.up
-
     create_table :result_logs do |t|
       t.integer     :log_id
       t.string      :log_type
@@ -12,7 +11,6 @@ class Setup < ActiveRecord::Migration
       t.timestamps
     end
 
-
     create_table :bugs do |t|
       t.string      :bug_no
       t.string      :status
@@ -20,7 +18,6 @@ class Setup < ActiveRecord::Migration
     end
 
     add_index :bugs, :bug_no, :unique => true
-
 
     create_table :runs do |t|
       t.string      :build_no
@@ -36,7 +33,6 @@ class Setup < ActiveRecord::Migration
     add_index :runs, :build_no, :unique => false
     add_index :runs, :flavor, :unique => false
 
-
     create_table :builds do |t|
       t.references  :run
       t.string      :name # ???
@@ -48,7 +44,6 @@ class Setup < ActiveRecord::Migration
     end
 
     add_foreign_key :builds, :runs, :dependent => :delete
-
 
     create_table :results do |t|
       t.references  :build
@@ -80,6 +75,33 @@ class Setup < ActiveRecord::Migration
     add_index :result_bugs, [:result_id, :bug_id], :unique => true
 
 
+    create_table :kernel_srus do |t|
+      t.string :kernel_name
+      t.string :kernel_version
+      t.string :release
+      t.timestamps
+    end
+
+    create_table :kernel_sru_results do |t|
+      t.references  :kernel_sru
+      t.references  :log, :polymorphic => true
+
+      t.string      :jenkins_build
+      t.string      :jenkins_url
+
+      t.string      :arch
+      t.string      :graphics_card
+      t.string      :lp_bug
+      t.integer     :fail_count
+      t.integer     :skip_count
+      t.integer     :pass_count
+      t.integer     :total_count
+      t.datetime    :ran_at
+      t.timestamps
+    end
+
+
+
     create_table :bootspeed_runs do |t|
       t.string      :variant
       t.string      :arch
@@ -89,8 +111,8 @@ class Setup < ActiveRecord::Migration
       t.text        :sync_data
       t.timestamps
     end
- 
-
+    
+    
     create_table :bootspeed_results do |t|
       t.references  :bootspeed_run
       t.references  :log, :polymorphic => true
@@ -109,7 +131,7 @@ class Setup < ActiveRecord::Migration
 
     add_foreign_key :bootspeed_results, :bootspeed_runs, :dependent => :delete
 
-
+    # Bootspeed
     create_table :bootspeed_result_bugs do |t|
       t.references  :bootspeed_result
       t.references  :bug
@@ -123,6 +145,8 @@ class Setup < ActiveRecord::Migration
   
 
   def self.down
+    drop_table :kernel_sru_results
+    drop_table :kernel_srus
     drop_table :result_bugs
     drop_table :bootspeed_result_bugs
     drop_table :bugs
