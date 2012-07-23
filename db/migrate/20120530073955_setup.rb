@@ -76,7 +76,7 @@ class Setup < ActiveRecord::Migration
 
 
     create_table :kernel_srus do |t|
-      t.string :kernel_name
+      #t.string :kernel_flavor
       t.string :kernel_version
       t.string :release
       t.timestamps
@@ -89,9 +89,10 @@ class Setup < ActiveRecord::Migration
       t.string      :jenkins_build
       t.string      :jenkins_url
 
-      t.string      :arch
+      t.string      :kernel_flavor
+      t.string      :kernel_arch
+      t.string      :system_arch
       t.string      :graphics_card
-      t.string      :lp_bug
       t.integer     :fail_count
       t.integer     :skip_count
       t.integer     :pass_count
@@ -99,9 +100,20 @@ class Setup < ActiveRecord::Migration
       t.datetime    :ran_at
       t.timestamps
     end
+    
+    add_foreign_key :kernel_sru_results, :kernel_srus, :dependent => :delete
 
 
+    create_table :kernel_sru_result_bugs do |t|
+      t.references  :kernel_sru_result
+      t.references  :bug
+    end
 
+    add_foreign_key :kernel_sru_result_bugs, :kernel_sru_results, :dependent => :delete
+    add_foreign_key :kernel_sru_result_bugs, :bugs, :dependent => :delete
+    add_index :kernel_sru_result_bugs, [:kernel_sru_result_id, :bug_id], :unique => true
+
+    
     create_table :bootspeed_runs do |t|
       t.string      :variant
       t.string      :arch
@@ -145,8 +157,7 @@ class Setup < ActiveRecord::Migration
   
 
   def self.down
-    drop_table :kernel_sru_results
-    drop_table :kernel_srus
+    drop_table :kernel_sru_result_bugs
     drop_table :result_bugs
     drop_table :bootspeed_result_bugs
     drop_table :bugs
@@ -156,5 +167,7 @@ class Setup < ActiveRecord::Migration
     drop_table :runs
     drop_table :bootspeed_results
     drop_table :bootspeed_runs
+    drop_table :kernel_sru_results
+    drop_table :kernel_srus
   end
 end

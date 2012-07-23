@@ -114,22 +114,50 @@ end
 
 get "/ksru/:release" do
   @release = params[:release]
-  @releases = {}
+  @releases = KernelSru.select(:release).uniq.order("release DESC").map { |sru| sru.release }.keep_if{ |rel| not rel.blank? }
+  @srus = KernelSru.where(:release => @release)
 
+  puts "srus: #{@srus}"
   haml :sru_overview
 end
 
-get "/ksru/:release/run/:run" do
+get "/ksru/:release/sru/:sru_id" do
   @release = params[:release]
-  @run = params[:run]
+  @sru = KernelSru.find(params[:sru_id])
+  @results = @sru.kernel_sru_results
   @kernel = "3.0.0-23.38-generic 3.0.36"
 
   haml :sru_results
 end
 
 
+get "/ksru/:release/sru/:sru_id/pie" do
+  content_type :png
 
+  @sru = KernelSru.includes(:kernel_sru_results => [ :kernel_sru_result_bugs ]).find(params[:sru_id])
 
+  @stats = @sru.stats
+
+  EasyPlot::EasyPlot.pie_chart(
+    {
+      'Passed' => { :value => @stats[:pass], :color => "#abffab" },
+      'Failed' => { :value => @stats[:fail], :color => "#ffabab" },
+      'Skipped' => { :value => @stats[:skip], :color => "#dd4814" }
+    },
+    {
+      :width => 600,
+      :font => { "ubuntu-fonts/Ubuntu-R.ttf" => { :color => '#000000', :size => { :marker => 16, :legend => 20 } } }
+    }
+  ) 
+end
+
+get "/ksru/:release/sru/:sru_id/logs/:result_id" do
+  @sru     = KernelSru.find(params[:sru_id])
+  @result  = @sru.kernel_sru_results.find(params[:result_id])
+  @logs    = @result.result_logs
+
+  haml :smoke_result_logs
+end
 
 # API for external users to do their own data manipulation
 

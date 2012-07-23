@@ -29,7 +29,7 @@ jobs.each do |job|
     # Upgrade tests
     #puts "Upgrade test, name: #{name}"
 
-  when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
+  when /^XXX:REMOVEME(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(core)/
 
@@ -215,17 +215,137 @@ jobs.each do |job|
     puts "Kernel SRU test, name: #{name}"
 
     if name.match /sru_kernel-(.*)-(.*)-(.*)-(.*)/
-      b = name.scan(/sru_kernel-(.*)-(.*)-(.*)-(.*)/).first
+      b = name.scan(/sru_kernel-(.*)-([^_]+)_(.*)-(.*)-(.*)/).first
       release        = b[0]
-      kernel_version = b[1]
-      arch           = b[2]
-      graph_card     = b[3]
+      kernel_flavor  = b[1]
+      kernel_arch    = b[2]
+      sys_arch       = b[3]
+      graphics_card  = b[4]
+    
+      puts "Release: #{release}, flavor: #{kernel_flavor}, kernel arch: #{kernel_arch}, sys_arch: #{sys_arch}, Graphics card: #{graphics_card}"
     end
     
-    puts "Release: #{b[0]}, Kernel version: #{b[1]}, Architecture: #{b[2]}, Graphics card: #{b[3]}"
     
     puts "DEBUG: fetching job from #{url}/api/json"
     job_info = get_jenkins_api("#{url}/api/json")
+    builds = job_info['builds']
+    builds.sort{ |x,y| y['number'].to_i <=> x['number'].to_i }.each do |build|
+      build_number = build['number']
+      build_url = build['url']
+      build_info = get_jenkins_api("#{build_url}/api/json")
+      building = build_info['building']
+      build_desc = build_info['description']
+      # Jenkins multiplies a unix timestamp by a factor of 1000 for some
+      # reason.
+      build_date = Time.at(build_info['timestamp']/1000).to_datetime
+
+      # Skip this jenkins "build" if it hasn't finished yet
+      next if building
+
+      # Extract build_no and bug from build_desc
+      lp_bugs = []
+      kernel_version = "Unknown. Ran on #{build_date.strftime("%Y/%m/%d %H:%M")}"
+
+      puts "=============> desc: #{build_desc}"
+      if not build_desc.blank?
+        b = build_desc.split(/(\s+|,)/)
+        b.each do |s|
+          s.strip!
+          if s.match(/^LP:#[0-9]+$/)
+            # It's an LP bug; strip the "LP:#" prefix and add it
+            puts "lp_bug:#{s}, [#{s[4..-1]}]"
+            lp_bugs << s[4..-1]
+          end
+        end
+        kernel_version = b.first unless b.first.blank?
+      end
+
+      puts "===============> kver: #{kernel_version}"
+      sru = KernelSru.where(:kernel_version => kernel_version, :release => release)
+      if sru.empty?
+        sru = KernelSru.create!(
+          :kernel_version => kernel_version,
+          :release        => release
+        )
+      else
+        sru = sru.first
+      end
+
+      results = sru.kernel_sru_results.where(
+        :kernel_flavor => kernel_flavor,
+        :kernel_arch => kernel_arch,
+        :system_arch => sys_arch,
+        :graphics_card => graphics_card,
+        :ran_at => build_date
+      )
+
+      # We do assume that the builds are in order with newest on top. That being
+      # the case, we can safely assume that if we find the current result,
+      # there is no point in going any further.
+      break unless results.empty?
+
+      fail_count = 0
+      skip_count = 0
+      pass_count = 0
+      total_count = 0
+      build_info['actions'].each do |a|
+        next if a['totalCount'].nil?
+        fail_count = a['failCount']
+        skip_count = a['skipCount']
+        total_count = a['totalCount']
+        pass_count = total_count - fail_count - skip_count
+      end
+
+      result = sru.kernel_sru_results.create!(
+        :jenkins_build => build_number,
+        :jenkins_url => build_url,
+        :kernel_flavor => kernel_flavor,
+        :kernel_arch => kernel_arch,
+        :system_arch => sys_arch,
+        :graphics_card => graphics_card,
+        :fail_count => fail_count,
+        :skip_count => skip_count,
+        :pass_count => pass_count,
+        :total_count => total_count,
+        :ran_at => build_date
+      )
+
+      sru.touch
+    
+      lp_bugs.each do |bug_no|
+        bug = Bug.where(:bug_no => bug_no)
+        if bug.empty?
+          bug = Bug.create!(:bug_no => bug_no)
+        else
+          bug = bug.first
+        end
+        result.bugs << bug
+        result.save
+        sru.touch
+      end
+
+      build_info['artifacts'].each do |a|
+        dir = "public/logs/#{result.id}"
+        path = "#{dir}/#{a['fileName']}"
+        artifact_url = "#{build_url}/artifact/#{a['relativePath']}"
+
+        # Create directory if it doesn't exist
+        Dir.mkdir('public/logs') unless File.exists?('public/logs')
+        Dir.mkdir(dir) unless File.exists?(dir)
+
+        log = result.result_logs.create!(
+          :display_name => a['relativePath'],
+          :remote_url => artifact_url,
+          :path => path
+        )
+        puts "Pulling artifact from: #{artifact_url}"
+        # XXX: temporary commenting out
+        #req = SimpleHTTPRequest.new(artifact_url)
+        #req.download(path)
+        result.touch
+        sru.touch
+      end
+    end
 
     
   else

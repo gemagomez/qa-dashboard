@@ -8,23 +8,6 @@
 
 .grid_15
 
-  #breadcrumb
-    %span.crumb
-      %a{ :href => "/smoke/#{@release}" }
-        Smoke Testing 
-        = @release.capitalize
-    %span.crumb-sep
-      >>
-    %span.crumb
-      %a{ :href => "smoke/#{@release}/run/#{@image.run.id}" }
-      Image #{@image.run.build_no}
-    %span.crumb-sep
-      >>
-    %span.crumb
-      = "Results for #{@image.run.flavor}-#{@image.variant}-#{@image.arch} #{@result.name}"
-    %span.crumb-sep
-      Logs
-
   %h3 
     Result Logs
 

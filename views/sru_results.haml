@@ -2,7 +2,7 @@
   $(document).ready(function() {
     $(".data-table").dataTable({
       "bPaginate": false,
-      "aaSorting": [[1, 'desc']]
+      "aaSorting": [[1, 'asc']]
     });
   });
 
@@ -27,26 +27,26 @@
     %tr
       %td Pass Rate: 
       %td.num
-        = format "%.0f\%", 100
+        = format "%.0f\%", (@sru.stats[:pass_rate]*100)
     %tr
       %td Total Tests Run:
-      %td.num 96
+      %td.num= @sru.stats[:total]
     %tr
       %td Total Tests Failed: 
-      %td.num 0
+      %td.num= @sru.stats[:fail]
     %tr
       %td Total Tests Skipped:
-      %td.num 0
+      %td.num= @sru.stats[:skip]
 
   %h3 Graph
-  Insert graph here
+  %img{ :src => "/ksru/#{@release}/sru/#{@sru.id}/pie", :alt => "Results pie chart" }
 
   %h3 Kernel aggregated results
 
   %table.data-table
     %thead
       %tr
-        %th kernel
+        %th kernel flavour
         %th arch
         %th graphics card
         %th date
@@ -58,18 +58,25 @@
         %th bugs
         %th logs
     %tbody
-      %tr
-        %td generic_amd64
-        %td amd_64
-        %td mga_g200ew
-        %td 2012/07/23 06:39
-        %td.num 96
-        %td.num 96
-        %td.num 0
-        %td.num 0
-        %td.num{ :class => "#{result_color(1)}" }
-          = format "%.0f\%", 100
-        %td.num 0
-        %td.num 
-          %a{:href => ""}
-            logs
+      - for result in @results
+        %tr
+          %td
+            %a{ :href => result.jenkins_url }
+              = "#{result.kernel_flavor}_#{result.kernel_arch}"
+          %td= result.system_arch
+          %td= result.graphics_card
+          %td= result.ran_at
+          %td.num= result.total_count
+          %td.num= result.pass_count
+          %td.num= result.fail_count
+          %td.num= result.skip_count
+          %td.num{ :class => "#{result_color(result.pass_rate)}" }
+            = format "%.0f\%", (result.pass_rate*100)
+          %td.num
+            - for bug in result.bugs
+              %span{ :class => "bug-#{bug.status}" }
+                %a{ :href => "https://bugs.launchpad.net/bugs/#{bug.bug_no}" }
+                  = "#{bug.bug_no} "
+          %td.num
+            %a{:href => "/ksru/#{@release}/sru/#{@sru.id}/logs/#{result.id}"}
+              = result.result_logs.count
