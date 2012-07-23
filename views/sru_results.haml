@@ -1,0 +1,75 @@
+:javascript
+  $(document).ready(function() {
+    $(".data-table").dataTable({
+      "bPaginate": false,
+      "aaSorting": [[1, 'desc']]
+    });
+  });
+
+.grid_15
+
+  #breadcrumb
+    %span.crumb
+      %a{ :href => "/ksru/#{@release}" }
+        Kernel SRU Testing 
+        = @release.capitalize
+    %span.crumb-sep
+      >>
+    %span.crumb
+      %a{ :href => "" }
+        Kernel #{@kernel}
+    %span.crumb-sep
+
+  %h3 
+    Results
+  
+  %table{ :border => 0 }
+    %tr
+      %td Pass Rate: 
+      %td.num
+        = format "%.0f\%", 100
+    %tr
+      %td Total Tests Run:
+      %td.num 96
+    %tr
+      %td Total Tests Failed: 
+      %td.num 0
+    %tr
+      %td Total Tests Skipped:
+      %td.num 0
+
+  %h3 Graph
+  Insert graph here
+
+  %h3 Kernel aggregated results
+
+  %table.data-table
+    %thead
+      %tr
+        %th kernel
+        %th arch
+        %th graphics card
+        %th date
+        %th #total
+        %th #pass
+        %th #fail
+        %th #skip
+        %th pass rate
+        %th bugs
+        %th logs
+    %tbody
+      %tr
+        %td generic_amd64
+        %td amd_64
+        %td mga_g200ew
+        %td 2012/07/23 06:39
+        %td.num 96
+        %td.num 96
+        %td.num 0
+        %td.num 0
+        %td.num{ :class => "#{result_color(1)}" }
+          = format "%.0f\%", 100
+        %td.num 0
+        %td.num 
+          %a{:href => ""}
+            logs
