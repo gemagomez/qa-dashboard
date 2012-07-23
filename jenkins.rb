@@ -29,10 +29,9 @@ jobs.each do |job|
     # Upgrade tests
     #puts "Upgrade test, name: #{name}"
 
-  #when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
+  when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(core)/
-  when /^(aprecise|aquantal)-(desktop|server|alternate|core)/
 
     # Smoke tests
     puts "Smoke test, name: #{name}"
@@ -228,7 +227,6 @@ jobs.each do |job|
     puts "DEBUG: fetching job from #{url}/api/json"
     job_info = get_jenkins_api("#{url}/api/json")
 
-    puts "JSON: #{job_info}"
     
   else
     # Unknown test

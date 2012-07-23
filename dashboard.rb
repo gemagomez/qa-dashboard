@@ -112,6 +112,24 @@ get "/smoke/:release/run/:run_id/image/:image_id/pie" do
   ) 
 end
 
+get "/ksru/:release" do
+  @release = params[:release]
+  @releases = {}
+
+  haml :sru_overview
+end
+
+get "/ksru/:release/run/:run" do
+  @release = params[:release]
+  @run = params[:run]
+  @kernel = "3.0.0-23.38-generic 3.0.36"
+
+  haml :sru_results
+end
+
+
+
+
 
 # API for external users to do their own data manipulation
 
