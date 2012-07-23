@@ -29,7 +29,7 @@ jobs.each do |job|
     # Upgrade tests
     #puts "Upgrade test, name: #{name}"
 
-  when /^XXX:REMOVEME(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
+  when /^(lucid|natty|oneiric|precise|quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(desktop|server|alternate|core)/
   #when /^(quantal)-(core)/
 
@@ -246,7 +246,6 @@ jobs.each do |job|
       lp_bugs = []
       kernel_version = "Unknown. Ran on #{build_date.strftime("%Y/%m/%d %H:%M")}"
 
-      puts "=============> desc: #{build_desc}"
       if not build_desc.blank?
         b = build_desc.split(/(\s+|,)/)
         b.each do |s|
@@ -260,7 +259,6 @@ jobs.each do |job|
         kernel_version = b.first unless b.first.blank?
       end
 
-      puts "===============> kver: #{kernel_version}"
       sru = KernelSru.where(:kernel_version => kernel_version, :release => release)
       if sru.empty?
         sru = KernelSru.create!(
